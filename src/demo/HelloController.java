@@ -5,6 +5,11 @@ import com.jfinal.core.Controller;
 public class HelloController extends Controller {
 
 	public void index(){
-		renderText("hello");
+		renderText("hello"); 
+		
+	}
+	
+	public void showHello(){
+		renderText("show hello");
 	}
 }

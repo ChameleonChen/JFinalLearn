@@ -7,6 +7,5 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/JFinal"/>
-	<classpathentry kind="lib" path="D:/CQR_DATA/JFinalLearn/WebRoot/WEB-INF/lib/jetty-server-8.1.8.jar"/>
 	<classpathentry kind="output" path="WebRoot/WEB-INF/classes"/>
 </classpath>
