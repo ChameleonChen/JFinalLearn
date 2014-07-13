@@ -20,6 +20,7 @@ public class DemoConfig extends JFinalConfig {
 	@Override
 	public void configRoute(Routes me) {
 		me.add("/hello", HelloController.class);
+		me.add("/login", Login.class,"/login");
 	}
 
 	@Override
@@ -28,6 +29,8 @@ public class DemoConfig extends JFinalConfig {
 		me.add(cp);
 		ActiveRecordPlugin arp = new ActiveRecordPlugin(cp);
 		me.add(arp);
+		
+		//为数据库添加表
 		arp.addMapping("user", User.class);
 	}
 
