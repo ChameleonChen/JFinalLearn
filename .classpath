@@ -7,5 +7,8 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/JFinal"/>
+	<classpathentry kind="lib" path="C:/Users/cqr/Documents/GitHub/JFinalLearn/WebRoot/WEB-INF/lib/c3p0-0.8.4.5.jar"/>
+	<classpathentry kind="lib" path="C:/Users/cqr/Documents/GitHub/JFinalLearn/WebRoot/WEB-INF/lib/jetty-server-8.1.8.jar"/>
+	<classpathentry kind="lib" path="C:/Users/cqr/Documents/GitHub/JFinalLearn/WebRoot/WEB-INF/lib/mysql-connector-java-5.1.31-bin.jar"/>
 	<classpathentry kind="output" path="WebRoot/WEB-INF/classes"/>
 </classpath>
