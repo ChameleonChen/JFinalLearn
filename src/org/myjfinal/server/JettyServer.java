@@ -1,6 +1,7 @@
 package org.myjfinal.server;
 
 import org.eclipse.jetty.server.Server;
+import org.myjfinal.kit.PortKit;
 import org.myjfinal.kit.StrKit;
 public class JettyServer implements IServer {
 
@@ -53,10 +54,15 @@ public class JettyServer implements IServer {
 	}
 
 	private void doStart() {
+		if (!PortKit.isAvailable(port)) {
+			throw new IllegalArgumentException("the port is already used :"+port);
+		}
+		
 		
 	}
 	
 	private void doStop() {
 		
 	}
+	
 }

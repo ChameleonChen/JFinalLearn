@@ -6,7 +6,8 @@ import java.net.DatagramSocket;
 public class PortKit {
 
 	/**
-	 * 检测计算机端口port是否可以使用，返回false表明端口已经被占用。
+	 * 检测计算机端口port是否可以使用。
+	 * 如果port非法或者port端口已经被占用，则返回false。
 	 * 比如说某个进程占用了80端口，则当port = 80时，函数返回false。
 	 * @param port
 	 * @return
