@@ -25,12 +25,12 @@ public class DemoConfig extends JFinalConfig {
 
 	@Override
 	public void configPlugin(Plugins me) {
-		C3p0Plugin cp = new C3p0Plugin("jdbc:mysql://localhost/jfinal_demo", "root", "qwebb940420");
+		C3p0Plugin cp = new C3p0Plugin("jdbc:mysql://localhost/mydb", "admin", "123456");
 		me.add(cp);
 		ActiveRecordPlugin arp = new ActiveRecordPlugin(cp);
 		me.add(arp);
 		
-		//ÎªÊý¾Ý¿âÌí¼Ó±í
+		//Îªï¿½ï¿½Ý¿ï¿½ï¿½ï¿½Ó±ï¿½
 		arp.addMapping("user", User.class);
 	}
 

@@ -23,4 +23,8 @@ public class Login extends Controller {
 		renderText("hello "+userName);
 		return ;
 	}
+	
+	public void addUser(){
+		
+	}
 }
