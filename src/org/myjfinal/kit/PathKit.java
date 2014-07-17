@@ -1,6 +1,7 @@
 package org.myjfinal.kit;
 
 import java.io.File;
+import java.lang.NullPointerException;
 
 public class PathKit {
 
@@ -32,7 +33,27 @@ public class PathKit {
 		}
 	}
 	
+	/**
+	 * 将文件路劲转换成windows系统格式的文件路径。
+	 * 使用该方法之前可以通过 boolean is = "\\".equals(File.separator);
+	 * 来判断系统文件路径格式是否为windows格式。
+	 * @param path
+	 * @return
+	 */
+	public static String convertPathToWindowsFormat(String path) {
+		if (path == null) throw new NullPointerException();
+		
+		/*
+		 * 执行这段语句后，storeDir变量由存储以为'/'变成了存储两位的'\'。
+		 * 因为'\'为转移字符，因此内存中必须存储两位的'\'才能显示表示'\'。
+		 */
+		return path.replaceAll("/", "\\\\");
+	}
+	
 	public static void main(String[] args) {
-		System.out.println(detectWebRootPath());
+//		System.out.println(detectWebRootPath());
+		String path = "ndisduis/sdjais/gdahiuhas/adhiuas/";
+		convertPathToWindowsFormat(path);
+		System.out.println(path);
 	}
 }

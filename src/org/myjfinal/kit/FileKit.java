@@ -5,8 +5,8 @@ import java.io.File;
 public class FileKit {
 
 	/**
-	 * @param file 待删除的文件或者文件夹。
 	 * 删除传入的文件或者文件夹，如果file为null，则不进行任何操作。
+	 * @param file 待删除的文件或者文件夹。
 	 */
 	public static void deletFile(File file) {
 		if (file != null && file.exists()) {
