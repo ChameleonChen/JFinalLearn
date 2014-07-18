@@ -2,8 +2,11 @@ package org.myjfinal.server;
 
 import java.io.File;
 
+import org.eclipse.jetty.server.SessionManager;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.nio.SelectChannelConnector;
+import org.eclipse.jetty.server.session.HashSessionManager;
+import org.eclipse.jetty.server.session.SessionHandler;
 import org.eclipse.jetty.webapp.WebAppContext;
 import org.myjfinal.core.Const;
 import org.myjfinal.kit.FileKit;
@@ -13,13 +16,13 @@ import org.myjfinal.kit.StrKit;
 
 public class JettyServer implements IServer {
 
-	private int port;	// 服务器的端口
-	private String context;	// 上下文
-	private String webAppDir;
+	private int port;	                // 服务器的端口
+	private String context;	            // 上下文
 	private int scanIntervalSeconds;	// 扫描间隔时间
 	private boolean running = false;	// 判断服务器是否运行
-	private Server server;	// Jetty服务
+	private Server server;	            // Jetty服务
 	private WebAppContext webApp;
+	private String webAppDir;
 	
 	/*此构造方法仅用于对该类的测试*/
 	public JettyServer() {	}
@@ -88,9 +91,12 @@ public class JettyServer implements IServer {
 		connector.setPort(port);
 		server.addConnector(connector);
 		webApp = new WebAppContext();	        // 一个WebAppContext代表一个应用程序，可以是war包或者目录。
-		webApp.setResourceBase(webAppDir);      // 为应用程序配置目录
+		webApp.setResourceBase(webAppDir);      // 为应用程序配置目录，该目录的地位为WebRoot
 		//webApp.setWar(war);                   // 配置warb包
-		
+		webApp.setInitParameter("org.eclipse.jetty.servlet.Default.dirAllowed", "false");
+		webApp.setInitParameter("org.eclipse.jetty.servlet.Default.useFileMappedBuffer", "false");	// webApp.setInitParams(Collections.singletonMap("org.mortbay.jetty.servlet.Default.useFileMappedBuffer", "false"));
+		persistSession(webApp);
+		server.setHandler(webApp);              // 将webApp作为Handle配置给server
 	}
 	
 	private void doStop() {
@@ -115,6 +121,23 @@ public class JettyServer implements IServer {
 			storeDir = storeDir.replaceAll("/", "\\\\");	//将原来的文件分隔符替换
 		}
 		return storeDir;
+	}
+	
+	private void persistSession(WebAppContext webApp) {
+		String storeDir = getStoreDir();
+		
+		//TODO 搞清为什么一定要HashSessionManager
+		SessionManager sm = webApp.getSessionHandler().getSessionManager();
+		if (sm instanceof HashSessionManager) {
+			((HashSessionManager)sm).setStoreDirectory(new File(storeDir));
+			return ;
+		}
+		
+		HashSessionManager hsm = new HashSessionManager();
+		hsm.setStoreDirectory(new File(storeDir));
+		SessionHandler sh = new SessionHandler();
+		sh.setSessionManager(hsm);
+		webApp.setSessionHandler(sh);
 	}
 	
 	public void setContext(String context) {
