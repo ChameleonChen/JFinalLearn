@@ -3,10 +3,14 @@ package org.myjfinal.server;
 import java.io.File;
 
 import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.server.nio.SelectChannelConnector;
+import org.eclipse.jetty.webapp.WebAppContext;
+import org.myjfinal.core.Const;
 import org.myjfinal.kit.FileKit;
 import org.myjfinal.kit.PathKit;
 import org.myjfinal.kit.PortKit;
 import org.myjfinal.kit.StrKit;
+
 public class JettyServer implements IServer {
 
 	private int port;	// 服务器的端口
@@ -15,6 +19,7 @@ public class JettyServer implements IServer {
 	private int scanIntervalSeconds;	// 扫描间隔时间
 	private boolean running = false;	// 判断服务器是否运行
 	private Server server;	// Jetty服务
+	private WebAppContext webApp;
 	
 	/*此构造方法仅用于对该类的测试*/
 	public JettyServer() {	}
@@ -65,6 +70,26 @@ public class JettyServer implements IServer {
 			throw new IllegalArgumentException("the port is already used :"+port);
 		}
 		
+		deletSessionData();
+		
+		System.out.println("Starting JFinal :" + Const.JFINAL_VERSION);
+		/*
+		 * 一、概述
+		 *     在Jetty框架中，Server的对象必须配合Connectpr和Handle一起使用。
+		 * 也就是说Server是Connector和Handle之间的桥梁。
+		 * 二、实现方案
+		 *     1.实例化Server对象。
+		 *     2.Connector为接口，实例化性能比较好的SelectChaanelConnector类来获取接口。
+		 *       并且将Connect接口配置给Server。
+		 *     3.
+		 */
+		server = new Server();
+		SelectChannelConnector connector = new SelectChannelConnector();
+		connector.setPort(port);
+		server.addConnector(connector);
+		webApp = new WebAppContext();	        // 一个WebAppContext代表一个应用程序，可以是war包或者目录。
+		webApp.setResourceBase(webAppDir);      // 为应用程序配置目录
+		//webApp.setWar(war);                   // 配置warb包
 		
 	}
 	
@@ -100,8 +125,8 @@ public class JettyServer implements IServer {
 		JettyServer jettyServer = new JettyServer();
 		jettyServer.setContext("/");
 //		System.out.println(File.separator+"\n"+jettyServer.getStoreDir());
-		File file = new File(jettyServer.getStoreDir());
-		FileKit.deletFile(file);
+//		File file = new File(jettyServer.getStoreDir());
+//		FileKit.deletFile(file);
 	}
 	
 }
