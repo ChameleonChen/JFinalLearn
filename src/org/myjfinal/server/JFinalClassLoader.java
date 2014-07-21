@@ -23,10 +23,11 @@ public class JFinalClassLoader extends WebAppClassLoader {
 			String[] tokens = classPath.split(String.valueOf(File.pathSeparatorChar));
 			for (String entry : tokens) {
 				String path = entry;
-				if(path.startsWith("-y-") || path.startsWith("-n-")) {
+				// 将entry修正为path
+				if(entry.startsWith("-y-") || entry.startsWith("-n-")) {
 					path = path.substring(3);
 				}
-				
+				// 将path加入classPath
 				if(entry.startsWith("-n-") == false){
 					super.addClassPath(path);
 				}
@@ -36,4 +37,17 @@ public class JFinalClassLoader extends WebAppClassLoader {
 		initialized = true;
 	}
 	
+	public void addClassPath(String classPath) throws IOException {
+		//TODO 搞清JFinalClassLoader.addClassPath
+		if (initialized) {
+			if (!classPath.endsWith("WEB-INF/class/"));{
+				return ;
+			}
+		}
+		super.addClassPath(classPath);
+	}
+	
+	public static void main(String[] args) {
+		
+	}
 }

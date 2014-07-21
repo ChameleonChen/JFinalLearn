@@ -1,6 +1,7 @@
 package org.myjfinal.server;
 
 import java.io.File;
+import java.io.IOException;
 
 import org.eclipse.jetty.server.SessionManager;
 import org.eclipse.jetty.server.Server;
@@ -74,6 +75,14 @@ public class JettyServer implements IServer {
 		}
 		
 		deletSessionData();
+		/*
+		 * |Server|连接 |Connector|与|Handler|
+		 * |---------------------------------------------------------------------|
+		 * |    ---------------          ----------            --------------    |
+		 * |   |   Connector   | <----> |  Server  | <----->  |   Handler    |   |
+		 * |    ---------------          ----------            --------------    |
+		 * |---------------------------------------------------------------------|
+		 */
 		
 		System.out.println("Starting JFinal :" + Const.JFINAL_VERSION);
 		/*
@@ -90,17 +99,34 @@ public class JettyServer implements IServer {
 		SelectChannelConnector connector = new SelectChannelConnector();
 		connector.setPort(port);
 		server.addConnector(connector);
+		
 		webApp = new WebAppContext();	        // 一个WebAppContext代表一个应用程序，可以是war包或者目录。
 		webApp.setResourceBase(webAppDir);      // 为应用程序配置目录，该目录的地位为WebRoot
 		//webApp.setWar(war);                   // 配置warb包
 		webApp.setInitParameter("org.eclipse.jetty.servlet.Default.dirAllowed", "false");
 		webApp.setInitParameter("org.eclipse.jetty.servlet.Default.useFileMappedBuffer", "false");	// webApp.setInitParams(Collections.singletonMap("org.mortbay.jetty.servlet.Default.useFileMappedBuffer", "false"));
 		persistSession(webApp);
+		
 		server.setHandler(webApp);              // 将webApp作为Handle配置给server
+		changeClassLoader(webApp);
+		
+		if (scanIntervalSeconds > 0) {
+			
+		}
 	}
 	
 	private void doStop() {
 		
+	}
+	
+	private void changeClassLoader(WebAppContext webApp) {
+		try {
+			String classPath = System.getProperty("java.class.path");
+			JFinalClassLoader wacl = new JFinalClassLoader(webApp, classPath);
+			wacl.addClassPath(classPath);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	private void deletSessionData() {
