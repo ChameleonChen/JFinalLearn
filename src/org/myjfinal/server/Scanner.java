@@ -1,6 +1,7 @@
 package org.myjfinal.server;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Timer;
@@ -36,6 +37,35 @@ public abstract class Scanner {
 	
 	private void working() {
 		
+	}
+	
+	/**
+	 * 扫描文件、或者文件夹file，将其中文件全部更新到
+	 * Map<String, TimeSize> cruScan 中。
+	 * @param file
+	 * @author ChameleonChen
+	 */
+	private void scan(File file) {
+		if (file == null || !file.exists()) {
+			return ;
+		}
+		
+		if (file.isFile()) {
+			try {
+				cruScan.put(file.getCanonicalPath(), new TimeSize(file.lastModified(), file.length()));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		else if (file.isDirectory()) {
+			File[] files = file.listFiles();
+			if (files != null) {
+				for (File entry : files) {
+					scan(entry);
+				}
+			}
+		}
 	}
 	
 	private void compare() {
