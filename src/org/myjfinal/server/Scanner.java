@@ -33,10 +33,15 @@ public abstract class Scanner {
 		this.interval = interval;
 	}
 	
-	public abstract void doChange();
+	public abstract void onChange();
 	
 	private void working() {
+		scan(rootDir);
+		compare();
 		
+		preScan.clear();
+		cruScan.putAll(cruScan);
+		cruScan.clear();
 	}
 	
 	/**
@@ -69,7 +74,15 @@ public abstract class Scanner {
 	}
 	
 	private void compare() {
+		// 第一次执行compare()时，preScan.size() == 0
+		if (preScan.size() == 0) {
+			return ;
+		}
 		
+		//TODO 学习|HashMap|的equals()的实现方法。
+		if (!preScan.equals(cruScan)) {
+			onChange();
+		}
 	}
 	
 	public void start() {
