@@ -1,7 +1,62 @@
 package org.myjfinal.server;
 
+import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
+
+import org.myjfinal.kit.StrKit;
+
 public abstract class Scanner {
 
+	private File rootDir;
+	private boolean running;
+	private Map<String, TimeSize> preScan = new HashMap<String, TimeSize>();
+	private Map<String, TimeSize> cruScan = new HashMap<String, TimeSize>();
+	private Timer timer;
+	private TimerTask task;
+	private int interval;
+	
+	public Scanner(String rootDir, int interval) {
+		if (!StrKit.isBlank(rootDir)) {
+			throw new IllegalArgumentException("the rootDir can not be blank");
+		}
+		this.rootDir = new File(rootDir);
+		if (!this.rootDir.isDirectory()) {
+			throw new IllegalArgumentException("the "+rootDir+"is not a directory");
+		}
+		if (interval < 0) {
+			throw new IllegalArgumentException("interval must bigger than zear");
+		}
+		this.interval = interval;
+	}
+	
+	public abstract void doChange();
+	
+	private void working() {
+		
+	}
+	
+	private void compare() {
+		
+	}
+	
+	public void start() {
+		// 启动定时任务
+		if (!running) {
+			timer = new Timer("My JFinal - Scanner");
+			task = new TimerTask() {
+				
+				@Override
+				public void run() {
+					working();
+				}
+			};
+			timer.schedule(task, 1010L * interval, 1010L * interval);
+			running = true;		// 标志启动
+		}
+	}
 }
 
 /**
