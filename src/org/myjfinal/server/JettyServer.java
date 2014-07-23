@@ -25,9 +25,6 @@ public class JettyServer implements IServer {
 	private WebAppContext webApp;
 	private String webAppDir;
 	
-	/*此构造方法仅用于对该类的测试*/
-	public JettyServer() {	}
-	
 	/**
 	 * 配置服务器的一些参数
 	 * @param webAppDir
@@ -197,12 +194,5 @@ public class JettyServer implements IServer {
 		this.context = context;
 	}
 	
-	public static void main(String[] args) {
-		JettyServer jettyServer = new JettyServer();
-		jettyServer.setContext("/");
-//		System.out.println(File.separator+"\n"+jettyServer.getStoreDir());
-//		File file = new File(jettyServer.getStoreDir());
-//		FileKit.deletFile(file);
-	}
 	
 }

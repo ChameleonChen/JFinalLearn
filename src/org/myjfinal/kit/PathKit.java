@@ -1,11 +1,32 @@
 package org.myjfinal.kit;
 
 import java.io.File;
+import java.io.IOException;
 import java.lang.NullPointerException;
+import java.net.URISyntaxException;
 
 public class PathKit {
 
 	private static String webRootPath;
+	private static String rootClassPath;
+	
+	/**
+	 * 
+	 * @return .../WebRoot/WEB-INF/class
+	 */
+	public static String getRootClassPath() {
+		if (rootClassPath == null) {
+			try {
+				String path = PathKit.class.getResource("/").toURI().getPath();
+				return new File(path).getCanonicalPath();
+			} catch (URISyntaxException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		return rootClassPath;
+	}
 	
 	public static String getWebRootPath() {
 		if (webRootPath == null)
@@ -50,10 +71,4 @@ public class PathKit {
 		return path.replaceAll("/", "\\\\");
 	}
 	
-	public static void main(String[] args) {
-//		System.out.println(detectWebRootPath());
-		String path = "ndisduis/sdjais/gdahiuhas/adhiuas/";
-		convertPathToWindowsFormat(path);
-		System.out.println(path);
-	}
 }
