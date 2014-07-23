@@ -7,6 +7,10 @@ public class ServerFactory {
 	private static final int DEFAULT_PORT = 80;
 	private static final int DEFAULT_SCANINTERVALSECONDS = 5;
 	
+	public static IServer getServer(String webAppDir, int port, String context, int scanIntervalSeconds) {
+		return new JettyServer(webAppDir, port, context, scanIntervalSeconds);
+	}
+	
 	public static IServer getServer() {
 		return new JettyServer(detectWebAppDir(), DEFAULT_PORT, "/", DEFAULT_SCANINTERVALSECONDS);
 	}
