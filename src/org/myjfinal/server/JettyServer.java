@@ -65,8 +65,13 @@ public class JettyServer implements IServer {
 	}
 
 	public void stop() {
-		if (!running) {
-			
+		if (running) {
+			try {
+				server.stop();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			running = false;
 		}
 	}
 
@@ -139,10 +144,6 @@ public class JettyServer implements IServer {
 			e.printStackTrace();
 			System.exit(100);	// 非0表示异常退出
 		}
-	}
-	
-	private void doStop() {
-		
 	}
 	
 	private void changeClassLoader(WebAppContext webApp) {
