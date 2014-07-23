@@ -59,7 +59,8 @@ public class JettyServer implements IServer {
 	
 	public void start() {
 		if (!running) {
-			
+			doStart();
+			running = true;
 		}
 	}
 
@@ -111,7 +112,32 @@ public class JettyServer implements IServer {
 		changeClassLoader(webApp);
 		
 		if (scanIntervalSeconds > 0) {
-			
+			Scanner scanner = new Scanner(PathKit.getWebRootPath(), scanIntervalSeconds) {
+				
+				@Override
+				public void onChange() {
+					try {
+						System.err.println("\nLoading Changes");
+						webApp.stop();
+						JFinalClassLoader classLoader = new JFinalClassLoader(webApp, System.getProperty("java.class.path"));
+						webApp.setClassLoader(classLoader);
+						webApp.start();
+					} catch (Exception e) {
+						System.err.println("/nreload falied!!!");
+					}
+				}
+			};
+			System.out.println("starting scanner with scanIntervalSeconds :"+scanIntervalSeconds);
+			scanner.start();
+		}
+		
+		try {
+			System.out.println("Starting server on port : "+port);
+			server.start();
+			server.join();
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.exit(100);	// 非0表示异常退出
 		}
 	}
 	
