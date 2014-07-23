@@ -19,6 +19,13 @@ public abstract class Scanner {
 	private TimerTask task;
 	private int interval;
 	
+	/**
+	 * 该类可用于检测rootDir目录中的文件是否被修改，
+	 * 如果被修改则触发onChange()方法。
+	 * @param rootDir 被检测的文件目录,不可以为空。
+	 * @param interval 检测的时间间隔，需大于0.
+	 * @author ChameleonChen
+	 */
 	public Scanner(String rootDir, int interval) {
 		if (!StrKit.isBlank(rootDir)) {
 			throw new IllegalArgumentException("the rootDir can not be blank");
@@ -33,8 +40,16 @@ public abstract class Scanner {
 		this.interval = interval;
 	}
 	
+	/**
+	 * 该方法需要被重载，以指定Scanner类检测到rootDir目录中文件被修改后所执行的操作。
+	 * @author ChameleonChen
+	 */
 	public abstract void onChange();
 	
+	/**
+	 * 该方法作为TimeTask,每隔一定时间执行。
+	 * @author ChameleonChen
+	 */
 	private void working() {
 		scan(rootDir);
 		compare();
@@ -85,6 +100,10 @@ public abstract class Scanner {
 		}
 	}
 	
+	/**
+	 * 
+	 * @author ChameleonChen
+	 */
 	public void start() {
 		// 启动定时任务
 		if (!running) {
@@ -105,8 +124,8 @@ public abstract class Scanner {
 /**
  * 该类作为文件的标志。根据文件的最后修改时间time和文件的大小size对该类进行初始化，
  * 可达到以该类对象来唯一标志文件的效果。
+ * 
  * @author ChameleonChen
- *
  */
 class TimeSize {
 	final long time;        // 文件最后修改时间
