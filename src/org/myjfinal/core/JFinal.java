@@ -7,6 +7,11 @@ public class JFinal {
 	
 	private static IServer server;
 
+	/**
+	 * 该方法作为在Eclipse集成开发环境和Jetty框架下的调试入口。
+	 * @param args
+	 * @author ChameleonChen
+	 */
 	public static void main(String[] args) {
 		if (args == null || args.length == 0) {
 			server = ServerFactory.getServer();

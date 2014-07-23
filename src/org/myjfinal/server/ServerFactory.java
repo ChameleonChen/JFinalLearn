@@ -21,7 +21,7 @@ public class ServerFactory {
 	private static String detectWebAppDir() {
 		String rootClassPath = PathKit.getRootClassPath();
 		if (rootClassPath.indexOf("\\WEB-INF\\") != -1) {
-			String[] temp = rootClassPath.split("\\");
+			String[] temp = rootClassPath.split("\\\\");
 			return temp[temp.length - 3];
 		}
 		else if (rootClassPath.indexOf("/WEB-INF/") != -1) {
