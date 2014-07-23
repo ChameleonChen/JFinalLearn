@@ -27,7 +27,7 @@ public abstract class Scanner {
 	 * @author ChameleonChen
 	 */
 	public Scanner(String rootDir, int interval) {
-		if (!StrKit.isBlank(rootDir)) {
+		if (StrKit.isBlank(rootDir)) {
 			throw new IllegalArgumentException("the rootDir can not be blank");
 		}
 		this.rootDir = new File(rootDir);
