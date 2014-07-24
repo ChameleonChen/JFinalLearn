@@ -28,6 +28,17 @@ public class PathKit {
 		return rootClassPath;
 	}
 	
+	public static void setWebRootPath(String webRootPath) {
+		if (webRootPath == null) {
+			return;
+		}
+		
+		if (webRootPath.endsWith(File.separator)) {
+			webRootPath = webRootPath.substring(0, webRootPath.length() - 1);
+		}
+		PathKit.webRootPath = webRootPath;
+	}
+	
 	public static String getWebRootPath() {
 		if (webRootPath == null)
 			webRootPath = detectWebRootPath();

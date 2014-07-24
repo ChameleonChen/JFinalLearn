@@ -18,7 +18,7 @@ public class JFinalFilter implements Filter{
 
 	public void init(FilterConfig filterConfig) throws ServletException {
 		createJFinalConfig(filterConfig.getInitParameter("configClass"));
-		
+		//TODO CURRENT
 	}
 	
 	/**

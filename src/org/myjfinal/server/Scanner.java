@@ -94,7 +94,6 @@ public abstract class Scanner {
 			return ;
 		}
 		
-		//TODO 学习|HashMap|的equals()的实现方法。
 		if (!preScan.equals(cruScan)) {
 			onChange();
 		}

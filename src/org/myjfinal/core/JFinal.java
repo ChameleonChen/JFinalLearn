@@ -1,11 +1,27 @@
 package org.myjfinal.core;
 
+import javax.servlet.ServletContext;
+
+import org.myjfinal.config.JFinalConfig;
+import org.myjfinal.kit.PathKit;
 import org.myjfinal.server.IServer;
 import org.myjfinal.server.ServerFactory;
 
 public final class JFinal {
 	
 	private static IServer server;
+	
+	private JFinalConfig jfinalConfig;
+	private ServletContext servletContext;
+	
+	public boolean inti(JFinalConfig jfinalConfig, ServletContext context) {
+		return false;
+	}
+	
+	private void initPathUtil() {
+		String path = servletContext.getRealPath("/");
+		PathKit.setWebRootPath(path);
+	}
 
 	/**
 	 * 该方法作为在Eclipse集成开发环境和Jetty框架下的调试入口。
