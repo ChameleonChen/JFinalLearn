@@ -13,7 +13,7 @@ import org.myjfinal.config.JFinalConfig;
 
 public class JFinalFilter implements Filter{
 	
-	public JFinalConfig jfinalConfig;
+	private JFinalConfig jfinalConfig;
 
 
 	public void init(FilterConfig filterConfig) throws ServletException {
@@ -25,7 +25,7 @@ public class JFinalFilter implements Filter{
 	 * @param configClass 在web.xml文件中配置.
 	 * @author ChameleonChen
 	 */
-	public void createJFinalConfig(String configClass) {
+	private void createJFinalConfig(String configClass) {
 		if (configClass == null) {
 			throw new RuntimeException("please set configClass in the web.xml");
 		}
