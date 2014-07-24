@@ -3,7 +3,7 @@ package org.myjfinal.core;
 import org.myjfinal.server.IServer;
 import org.myjfinal.server.ServerFactory;
 
-public final class JFinal {
+public class JFinal {
 	
 	private static IServer server;
 
