@@ -23,7 +23,7 @@ class Config {
 	}
 	
 	private static void initLoggerFactory() {
-		
+		//TODO 接入Log机制
 	}
 	
 	private static void startPlugins() {
