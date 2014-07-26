@@ -8,7 +8,7 @@ class Config {
 	 * 这些对象存储了不同的配置信息，这些类的定义在org.myjfinal.config包中。
 	 */
 	private static final Constants constants = new Constants();
-	private static final Routes routes = new Routes();
+	private static final Routes routes = new Routes(){public void config() {} };
 	private static final Plugins plugins = new Plugins();
 	private static final Interceptors interceptors = new Interceptors();
 	private static final Handlers handlers = new Handlers();
