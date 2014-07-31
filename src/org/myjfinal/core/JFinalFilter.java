@@ -10,13 +10,16 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 
 import org.myjfinal.config.JFinalConfig;
+import org.myjfinal.log.Logger;
 
 public class JFinalFilter implements Filter{
 	
 	private JFinalConfig jfinalConfig;
 
+	private static Logger log;
 
 	public void init(FilterConfig filterConfig) throws ServletException {
+		initLogger();
 		createJFinalConfig(filterConfig.getInitParameter("configClass"));
 		//TODO CURRENT
 	}
@@ -56,4 +59,7 @@ public class JFinalFilter implements Filter{
 		
 	}
 
+	public static void initLogger() {
+		log = Logger.getLogger(JFinalFilter.class);
+	}
 }

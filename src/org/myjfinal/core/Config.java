@@ -1,6 +1,7 @@
 package org.myjfinal.core;
 
 import org.myjfinal.config.*;
+import org.myjfinal.log.Logger;
 
 class Config {
 
@@ -13,6 +14,8 @@ class Config {
 	private static final Interceptors interceptors = new Interceptors();
 	private static final Handlers handlers = new Handlers();
 	
+	private static Logger log;
+	
 	public static void configJFinal(JFinalConfig jfinalConfig) {
 		//TODO 弄清楚confgi调用顺序有无要求。
 		jfinalConfig.configConstant(constants);				initLoggerFactory();
@@ -23,7 +26,7 @@ class Config {
 	}
 	
 	private static void initLoggerFactory() {
-		//TODO 接入Log机制
+		log = Logger.getLogger(Config.class);
 	}
 	
 	private static void startPlugins() {
