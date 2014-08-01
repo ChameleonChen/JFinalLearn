@@ -15,13 +15,17 @@ import org.myjfinal.log.Logger;
 public class JFinalFilter implements Filter{
 	
 	private JFinalConfig jfinalConfig;
+	private final JFinal jfinal = JFinal.me();
 
 	private static Logger log;
 
 	public void init(FilterConfig filterConfig) throws ServletException {
 		initLogger();
 		createJFinalConfig(filterConfig.getInitParameter("configClass"));
-		//TODO CURRENT
+		
+		if (jfinal.init(jfinalConfig, filterConfig.getServletContext()) == false) {
+			throw new RuntimeException("filter init failed");
+		}
 	}
 	
 	/**

@@ -14,7 +14,22 @@ public final class JFinal {
 	private JFinalConfig jfinalConfig;
 	private ServletContext servletContext;
 	
-	public boolean inti(JFinalConfig jfinalConfig, ServletContext context) {
+	private static final JFinal me = new JFinal();
+	
+	public static JFinal me() {
+		return me;
+	}
+	
+	public boolean init(JFinalConfig jfinalConfig, ServletContext context) {
+		//TODO CURRENT
+		this.jfinalConfig = jfinalConfig;
+		this.servletContext = context;
+		
+		initPathUtil();
+		Config.configJFinal(jfinalConfig);
+		
+		
+		
 		return false;
 	}
 	
