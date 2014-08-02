@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Calculator</title>
+<style type="text/css">
+.output {font-weight: blod;}
+#payment {text-decoration: underline;}
+#graph {border: solid black 1px;}
+th, td {vertical-align: top;}
+</style>
+</head>
+<body>
+<table>
+<tr><th>Enter Loan Data:</th>
+	<td></td>
+	<th>Loan Balance, Cumulative Equity, And Insert Payments</th>
+</tr>
+<tr><td>Amount of the loan ($)</td>
+	<td><input id="amount" onchange="calculate();"></td>
+	<td rowspan="8">
+		<canvas id="graph" width="400" height="250"></canvas></td>
+</tr>
+<tr><td>Annual Intrest (%):</td>
+    <td><input id="apr" onchange="calculate();"></td>
+</tr>
+<tr>
+	<td>Repayment period (years):</td>
+	<td><input id="years" onchange="calculate();"></td>
+</tr>
+<tr>
+	<td>Zipcode (to find lenders):</td>
+	<td><input id="zipcode" onchange="calculate();"></td>
+</tr>
+<tr>
+	<th>Approximate Payments:</th>
+	<td><button onclick="calculate();">Calculate</button></td>
+</tr>
+<tr>
+	<td>Monthly payment:</td>
+	<td>$<span class="output" id="payment"></span></td>
+</tr>
+<tr>
+	<td>Total payment</td>
+	<td>$<span class="output" id="total"></span></td>	
+</tr>
+<tr>
+	<td>Total intrest</td>
+	<td>$<span class="output" id="totalintrest"></span></td>	
+</tr>
+<tr>
+	<th>Sponsors:</th>
+	<td colspan="2">
+	Apply for your loan with one of these fine lenders
+	<div id="lenders"></div></td>
+</tr>
+</table>
+
+<script type="text/javascript">
+"use strict";
+function calculate() {
+	var amount = document.getElementById("amount");
+	var apr = document.getElementById("apr");
+	var years = document.getElementById("years");
+	var zipcode = document.getElementById("zipcode");
+	var payment = document.getElementById("payment");
+	var total = document.getElementById("total");
+	var totalintrest = document.getElementById("totalintrest");
+	
+	var principal = parseFloat(amount.value);
+	var intrest = parseFloat(apr.value)/100/12;
+	var payments = parseFloat(years.value) * 12;
+	
+	var x = Math.pow(1 + intrest, payment);
+	var monthly = (principal * x * intrest) / (x-1);
+	
+	if (isFinite(monthly)) {
+		payment.innerHTML = monthly.toFixed(2);
+		total.innerHTML = (monthly * payments).toFixed(2);
+		totalintrest.innerHTML = ((monthly * payments) - principal).toFixed(2);
+		
+		save(amount.value, apr.value, years.value, zipcode.value);
+		
+		try {
+			getLenders(amount.value, apr.value, years.value, zicode.value);
+		}catch(e) {}
+		
+		chart(principal, intrest, monthly, payment);
+	}
+	else {
+		payment.innerHTML = "";
+		total.innerHTML = "";
+		totalintrest.innerHTML = "";
+		chart();
+	}
+}
+
+function save(amount, apr, years, zipcode) {
+	if (window.localStorage) {
+		localStorage.loan_amount = amount;
+		localStorage.loan_apr = apr;
+		localStorage.loan_years = years;
+		localStorage.loan_zipcode = zipcode;
+	}
+
+	window.onload = function() {
+		if (window.localStorage && localStorage.loan_amount) {
+			document.getElementById("amount") = localStorage.loan_amount;
+			document.getElementById("apr") = localStorage.loan_apr;
+			document.getElementById("years") = localStorage.loan_years;
+			document.getElementById("zipcode") = localStorage.loan_zipcode;
+		}
+	}
+}
+
+function getLenders(amount, apr, years, zipcode) {
+	if (!window.XMLHttpRequest) return;
+	
+	var ad = document.getElementById("lenders");
+	if (!ad) return;
+	
+	var url = "getLenders.php" + "?amt=" + encodeURIComponent(amount)
+			+"&apr" + encodeURIComponent(apr)
+			+"&yrs" + encodeURIComponent(years)
+			+"&zip" + encodeURIComponent(zipcode);
+	
+	var req = new XMLHttpRequest();
+	req.open("GET", url);
+	req.send(null);
+	
+	req.onreadystatechange = function() {
+		if (req.readyState == 4 && req.status == 200) {
+			var response = req.responseText;
+			var lenders = JSON.parse(response);
+			
+			var list = "";
+			for (var i = 0; i < lenders.lengrh; i++) {
+				list += "<li><a href='" + lenders[i].url + "'>" + lenders[i].name + "</a>";
+			}
+			
+			ad.innerHTML = "<url>" + list + "</url>";
+		}
+	}
+}
+
+function chart(principal, intrest, monthly, payments) {
+	var graph = document.getElementById("graph");
+	graph.width =grap.width;
+	
+	if (arguments.length == 0 || !graph.getContext) return;
+	
+	var g = graph.getContext("2d");
+	var width = graph.width;
+	var height = graph.height;
+	
+	function paymentToX(n) {
+		return n * width / payments;
+	}
+	
+	function amountToY(a) {
+		return height - (a * hetght / (monthly * payment * 1.05));
+	}
+	
+	g.moveTo(paymentToX(0), amountToY(0));
+	g.lineTo(paymentToX(payments), amountToY(monthly * payments));
+	g.lineTo(paymentToX(payments), amountToY(0), )
+	g.closePath();
+	g.fillStyle = "#f88";
+	g.fill();
+	g.font = "blod 12px sans-serf";
+	g.fileText("total intrest payments", 20, 20);
+	
+	var equity = 0;
+	g.beginPath();
+	g.moveTo(paymentToX(0), amountToY(0));
+	for (var p = 1; p <= payments; p++) {
+		var thisMonthsIntrest = (principal - equity) * intrest;
+		equity += (monyhly - thisMonthsintrest);
+		g.lineTo(paymentToX(p), amountToY(equity));
+	}
+	g.lineTo(paymentToX(payments), a,amountToY(0));
+	g.closePath();
+	g.fillStyle = "green";
+	g.fill();
+	g.fillText("total equity", 20, 35);
+	
+	var bal = principal;
+	g.beginPath();
+	g.moveTo(paymentToX(0), amountToY(bal));
+	for (var p = 1; p <= payments; p++) {
+		var thisMonthlyintrest = bal * intrest;
+		bal -= (monthly - thisMonthlyintrest);
+		g.lineTo(paymentToX(p), amountToY(bal));
+	}
+	g.lineWidth = 3;
+	g.stroken();
+	g.fillStyle = "black";
+	g.fillText("Loan Balance", 20, 50);
+	
+	g.textAlign = "center";
+	var y = amountToY(0);
+	for (var year = 1; year * 12 <= payments; year++) {
+		var x = paymentToY(year * 12);
+		g.fillRect(x - 0.5, y - 3, 1, 3);
+		if (year == 1) g.fillText("year", x, y - 5);
+		if (year % 5 == 0 && year * 12 != payments) {
+			g.fillText(String(year), x, y-5);
+		}
+	}
+	
+	g.textAlign = "right";
+	g.textBaseLine = "middle";
+	var ticks = [monthly * payments, principal];
+	var rightEdge = paymentToX(payments);
+	for (var i = 0; i < ticks.length; i++) {
+		var y = amountToY(ticks[i]);
+		g.fillRect(rightEdge - 3, y - 0.5, 3, 1);
+		g.filltext(String(ticks[i].toFixed(0)), rightEdge- 5, y);
+	}
+}
+</script>
+</body>
+</html>
